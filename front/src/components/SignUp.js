@@ -8,9 +8,9 @@ import { Typography, Paper, Box, TextField, Button } from "@mui/material";
 const Signup = () => {
   const navigate = useNavigate();
 
-  const [user_id, setId] = useState("");
+  //const [user_id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const [re_password, setPasswordConfirm] = useState("");
+  //const [re_password, setPasswordConfirm] = useState("");
   const [user_name, setUsername] = useState("");
   const [birth, setBirthday] = useState("");
   const [email, setEmail] = useState("");
@@ -24,9 +24,9 @@ const Signup = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     api.post('join',{
-      user_id: `${user_id}`,
+      //user_id: `${user_id}`,
       password: `${password}`,
-      re_password: `${re_password}`,
+      //re_password: `${re_password}`,
       user_name: `${user_name}`,
       birth: `${birth}`,
       email: `${email}`,
@@ -41,17 +41,17 @@ const Signup = () => {
     });
   };
 
-  const handleIdChange = (event) => {
-    setId(event.target.value);
-  };
+  // const handleIdChange = (event) => {
+  //   setId(event.target.value);
+  // };
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
 
-  const handlePasswordConfirmChange = (event) => {
-    setPasswordConfirm(event.target.value);
-  };
+  // const handlePasswordConfirmChange = (event) => {
+  //   setPasswordConfirm(event.target.value);
+  // };
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -91,12 +91,19 @@ const Signup = () => {
           Sign Up
         </Typography>
       <TextField
+        label="EMAIL"
+        variant="outlined"
+        margin="normal"
+        value={email}
+        onChange={handleEmailChange}
+      />
+      {/* <TextField
         label="ID"
         variant="outlined"
         margin="normal"
         value={user_id}
         onChange={handleIdChange}
-      />
+      /> */}
       <TextField
         label="PW"
         variant="outlined"
@@ -105,7 +112,7 @@ const Signup = () => {
         value={password}
         onChange={handlePasswordChange}
       />
-      <TextField
+      {/* <TextField
         label="CONFIRM PW"
         variant="outlined"
         margin="normal"
@@ -117,7 +124,7 @@ const Signup = () => {
             helperText={
               confirm ? (!isSame() ? '비밀번호를 다시 확인해 주세요.' : '') : ''
             }
-      />
+      /> */}
       <TextField
         label="NAME"
         variant="outlined"
@@ -132,13 +139,7 @@ const Signup = () => {
         value={birth}
         onChange={handleBirthdayChange}
       />
-      <TextField
-        label="EMAIL"
-        variant="outlined"
-        margin="normal"
-        value={email}
-        onChange={handleEmailChange}
-      />
+     
       <TextField
         label="PHONE NUMBER"
         variant="outlined"
