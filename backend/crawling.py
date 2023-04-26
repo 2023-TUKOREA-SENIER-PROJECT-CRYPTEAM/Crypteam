@@ -47,7 +47,7 @@ def connect_db():
     port = 3306
     username = "root"
     database = "NewsData"
-    password = "1234"
+    password = "825582qaz"
     try:
         con = pymysql.connect(host=host, user=username, password=password,
                         db=database, charset='utf8') # 한글처리 (charset = 'utf8')
@@ -88,7 +88,7 @@ def Insert_db_table(df,name):
     port = 3306
     username = "root"
     database = "NewsData"
-    password = "1234"
+    password = "825582qaz"
     name_dic = {
         "비트코인" : "bitcoin",
         "이더리움" : "ethereum",
@@ -125,7 +125,7 @@ def Insert_db_table(df,name):
 
 searching_keyword = ["비트코인", "이더리움", "리플", "이더리움 클래식", "카르다노 에이다"]
 temp = ["카르다노 에이다"]
-for name in temp:
+for name in searching_keyword:
     # Creat_db_table(name)
     bot = news_bot(name)
     df = bot.run()

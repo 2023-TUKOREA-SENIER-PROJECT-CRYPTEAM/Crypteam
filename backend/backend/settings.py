@@ -137,9 +137,9 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'accounts_test02',
+        'NAME': 'user',
         'USER': 'root',
-        'PASSWORD': '1234',
+        'PASSWORD': '825582qaz',
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'OPTIONS': {
@@ -150,7 +150,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'NewsData',
         'USER': 'root',
-        'PASSWORD': '1234',
+        'PASSWORD': '825582qaz',
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'OPTIONS': {
@@ -200,3 +200,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3001',
+    'http://localhost:8080',
+]
