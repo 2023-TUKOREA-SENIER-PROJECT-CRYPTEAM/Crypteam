@@ -3,17 +3,23 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {  Box,Grid, Typography, TextField, Paper,Button,TableCell, TableContainer, Table, TableRow } from '@mui/material';
 //import NewsItem from '../NewsItem';
-
+// import axios from 'axios';
 function CoinNews() {
-  const [newsdata, setNewsData] = useState([]);
+  const [NewsData, setNewsData] = useState([{
+    id:'',
+    coin_name:'',
+    title:'',
+    url:'',
+    time:''
+  }]);
 
-  const [searchValue, setSearchValue] = useState('');
-  const [selectedCoin, setSelectedCoin] = useState('전체');
+  // const [searchValue, setSearchValue] = useState('');
+  // const [selectedCoin, setSelectedCoin] = useState('전체');
 
   useEffect(() => {
     async function fetchNewsData() {
-      const response = await axios.get('http://127.0.0.1:8000/api/news');
-      setNewsData(response.data);
+      const response = await axios.get('http://127.0.0.1:8000/api/news/');
+      setNewsData(JSON.parse(response.data));
     }
     fetchNewsData();
   }, []);
@@ -22,13 +28,13 @@ function CoinNews() {
   const handleCoinClick = (coin_name) => {
         setSelectedCoin(coin_name);
     };
-    const filteredCoins = newsdata.filter((newsdata) => {
-        if (selectedCoin === '전체') {
-            return newsdata.news_title.toLowerCase().includes(searchValue.toLowerCase());
-        } else {
-            return newsdata.coin_name === selectedCoin && newsdata.news_title.toLowerCase().includes(searchValue.toLowerCase());
-        }
-    });
+    // const filteredCoins = NewsData.filter((NewsData) => {
+    //     if (selectedCoin === '전체') {
+    //         return NewsData.news_title.toLowerCase().includes(searchValue.toLowerCase());
+    //     } else {
+    //         return NewsData.coin_name === selectedCoin && NewsData.news_title.toLowerCase().includes(searchValue.toLowerCase());
+    //     }
+    // });
 
 
 
@@ -58,14 +64,12 @@ function CoinNews() {
                 <TableCell sx={{ fontWeight: 'bold', borderBottomWidth: 2 }}>코인</TableCell>
               </TableRow>
 
-              {filteredCoins.map((newsdata,index) => (
-              <TableRow key={newsdata.id}>
-                  <TableCell component="th" scope="row" sx={{ borderBottomWidth: 2 }}>
-                  {index + 1}
-                  </TableCell>
-                  <TableCell onClick={() => window.open(newsdata.news_url, '_blank')} sx={{ borderBottomWidth: 2 }}>{newsdata.news_title}</TableCell>
-                  <TableCell sx={{ borderBottomWidth: 2 }}>{newsdata.news_registered_date}</TableCell>
-                  <TableCell sx={{ borderBottomWidth: 2 }}>{newsdata.coin_name}</TableCell>
+              {NewsData.map((NewsData) => (
+              <TableRow key={NewsData.id}>
+                  <TableCell sx={{ borderBottomWidth: 2 }}>{NewsData.id}</TableCell>
+                  <TableCell onClick={() => window.open(NewsData.url, '_blank')} sx={{ borderBottomWidth: 2 }}>{NewsData.title}</TableCell>
+                  <TableCell sx={{ borderBottomWidth: 2 }}>{NewsData.time}</TableCell>
+                  <TableCell sx={{ borderBottomWidth: 2 }}>{NewsData.coin_name}</TableCell>
               </TableRow>
               ))}
             </Table>
