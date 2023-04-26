@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
-    'NewsData',
+    'newsdata',
 
     'rest_framework',
     'rest_framework_simplejwt',
@@ -137,7 +137,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'accounts_test02',
+        'NAME': 'accounts',
         'USER': 'root',
         'PASSWORD': '1234',
         'HOST': '127.0.0.1',
@@ -148,7 +148,7 @@ DATABASES = {
     },
     'other': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'NewsData',
+        'NAME': 'newsdta',
         'USER': 'root',
         'PASSWORD': '1234',
         'HOST': '127.0.0.1',
