@@ -23,7 +23,7 @@ const Signup = () => {
 //
   const handleSubmit = (event) => {
     event.preventDefault();
-    api.post('join',{
+    api.post('register/',{
       //user_id: `${user_id}`,
       password: `${password}`,
       //re_password: `${re_password}`,

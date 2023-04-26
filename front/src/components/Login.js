@@ -6,13 +6,13 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [user_id, setId] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const JWT_EXPIRY_TIME = 1800 * 1000 // 만료시간 30분 (밀리초로 표현)
   let count = 0;
 
-  const handleUserIdChange = (event) => {
-    setId(event.target.value);
+  const handleUserEmailChange = (event) => {
+    setEmail(event.target.value);
   };
 
   const handlePasswordChange = (event) => {
@@ -39,14 +39,14 @@ const Login = () => {
     sessionStorage.setItem('token', access);
     sessionStorage.setItem('refresh', refresh);
     //sessionStorage.setItem('nickname', `${res.data.user.nickname}`)
-    sessionStorage.setItem('user_id', `${res.data.user.user_id}`)
+    sessionStorage.setItem('email', `${res.data.user.email}`)
   }
 
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    api.post('auth',{
-      user_id: `${user_id}`,
+    api.post('auth/',{
+      email: `${email}`,
       password: `${password}`
     }).then(onLoginSuccess)
     .catch(function (res) {
@@ -61,10 +61,10 @@ const Login = () => {
           Log In
         </Typography>
         <TextField
-          label="Id"
+          label="EMAIL"
           variant="outlined"
-          value={user_id}
-          onChange={handleUserIdChange}
+          value={email}
+          onChange={handleUserEmailChange}
           sx={{ mb: 2}}
         />
         <TextField
