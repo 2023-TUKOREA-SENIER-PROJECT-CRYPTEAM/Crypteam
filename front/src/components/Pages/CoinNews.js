@@ -14,7 +14,7 @@ function CoinNews() {
   }]);
 
   // const [searchValue, setSearchValue] = useState('');
-  // const [selectedCoin, setSelectedCoin] = useState('전체');
+  const [selectedCoin, setSelectedCoin] = useState('전체');
 
   useEffect(() => {
     async function fetchNewsData() {
@@ -30,11 +30,18 @@ function CoinNews() {
     };
     // const filteredCoins = NewsData.filter((NewsData) => {
     //     if (selectedCoin === '전체') {
-    //         return NewsData.news_title.toLowerCase().includes(searchValue.toLowerCase());
+    //         return NewsData.title.toLowerCase().includes(searchValue.toLowerCase());
     //     } else {
-    //         return NewsData.coin_name === selectedCoin && NewsData.news_title.toLowerCase().includes(searchValue.toLowerCase());
+    //         return NewsData.coin_name === selectedCoin && NewsData.title.toLowerCase().includes(searchValue.toLowerCase());
     //     }
     // });
+    const filteredCoins = NewsData.filter((NewsData)=>{
+      if (selectedCoin === '전체') {
+        return true;
+      } else {
+        return NewsData.coin_name === selectedCoin;
+      }
+    })
 
 
 
@@ -64,7 +71,7 @@ function CoinNews() {
                 <TableCell sx={{ fontWeight: 'bold', borderBottomWidth: 2 }}>코인</TableCell>
               </TableRow>
 
-              {NewsData.map((NewsData) => (
+              {filteredCoins.map((NewsData) => (
               <TableRow key={NewsData.id}>
                   <TableCell sx={{ borderBottomWidth: 2 }}>{NewsData.id}</TableCell>
                   <TableCell onClick={() => window.open(NewsData.url, '_blank')} sx={{ borderBottomWidth: 2 }}>{NewsData.title}</TableCell>
