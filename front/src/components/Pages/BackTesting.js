@@ -1,6 +1,8 @@
 import axios from "axios";
+
 import React, {useState} from "react";
 import '../../css/Backtesting.css'
+
 
 const BackTesting = () => {
   const [coinName, setCoinName] = useState("");
@@ -11,6 +13,7 @@ const BackTesting = () => {
   const [testSize, setTestSize] = useState("");
   const [result, setResult] = useState("");
   const [showModal, setShowModal] = useState(false);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -116,3 +119,4 @@ const BackTesting = () => {
 };
 
 export default BackTesting;
+
