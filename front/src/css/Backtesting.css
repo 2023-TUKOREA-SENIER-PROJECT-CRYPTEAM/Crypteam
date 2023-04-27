@@ -105,7 +105,8 @@
 
 .modal button[type="submit"] {
   background-color: #4CAF50;
-  
+}
+
 .form-container {
   display: flex;
   flex-direction: column;
