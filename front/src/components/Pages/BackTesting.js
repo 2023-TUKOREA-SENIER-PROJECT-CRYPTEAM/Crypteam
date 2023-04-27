@@ -12,6 +12,14 @@ const BackTesting = () => {
   const [result, setResult] = useState("");
   const [showModal, setShowModal] = useState(false);
 
+<<<<<<< HEAD
+=======
+
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+
+>>>>>>> 640b2bf9353324a2910c3a7ca56abeb9df9c0900
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = {
@@ -77,6 +85,7 @@ const BackTesting = () => {
           <pre>{result}</pre>
         </div>
       </form>
+<<<<<<< HEAD
       {showModal && (
         <div className="modal">
           <div className="modal-content">
@@ -113,6 +122,11 @@ const BackTesting = () => {
       )}
     </>
   )
+=======
+    </div>
+  );
+
+>>>>>>> 640b2bf9353324a2910c3a7ca56abeb9df9c0900
 };
 
 export default BackTesting;
