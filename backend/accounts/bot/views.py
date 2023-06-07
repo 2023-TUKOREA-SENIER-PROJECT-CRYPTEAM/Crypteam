@@ -45,11 +45,6 @@ class AutoTradingView(APIView):
         "ROE" : data.iloc[-1]['ROE'],
         "pred" : data.iloc[-1]['pred'],
         "yeild" : data.iloc[-1]['yeild'],
-        "time" : data.iloc[-1]["time"],
-        "open" : data.iloc[-1]["open"],
-        "high" : data.iloc[-1]["high"],
-        "low" : data.iloc[-1]["low"],
-        "close" : data.iloc[-1]["close"],
         })
 
     def post(self, request):
@@ -57,7 +52,7 @@ class AutoTradingView(APIView):
         secret = request.data.get('secret')
         symbol = request.data.get('symbol')
         leverage = int(request.data.get('leverage'))
-        Trading(api_key, secret, symbol, leverage)
+        #Trading(api_key, secret, symbol, leverage)
         response_data = {
             'message': 'Success',
         }

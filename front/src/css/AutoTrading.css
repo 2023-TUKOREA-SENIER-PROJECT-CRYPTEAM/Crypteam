@@ -19,6 +19,7 @@
 .result-container {
   overflow-y: scroll;
   max-height: 300px;
+  margin-right: 20px;
 
 }
 
@@ -46,4 +47,5 @@
 
 .btn{
   margin:15px;
+
 }

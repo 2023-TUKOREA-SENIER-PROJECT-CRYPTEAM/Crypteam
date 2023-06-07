@@ -14,16 +14,7 @@ function AutoTrading() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const id = setInterval(async () => {
-            try {
-                const result = await axios.get('http://127.0.0.1:8000/api/AutoTrading/');
-                setData(prevData => [...prevData, result.data]); // GET 요청 결과 데이터를 배열에 추가합니다.
-                scrollToBottom();
-            } catch (error) {
-                console.error(error);
-            }
-        }, 5000);
-        setIntervalId(id);
+        
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/AutoTrading/', {
             api_key: apiKey,
@@ -36,16 +27,16 @@ function AutoTrading() {
         setData([response.data]); // POST 요청 응답 데이터를 배열에 담아 설정합니다.
         console.log(response.data);
         // 시작 버튼을 눌렀을 때 5초마다 자동으로 GET 요청을 보내기 위해 setInterval을 설정합니다.
-        // const id = setInterval(async () => {
-        //     try {
-        //         const result = await axios.get('http://127.0.0.1:8000/api/AutoTrading/');
-        //         setData(prevData => [...prevData, result.data]); // GET 요청 결과 데이터를 배열에 추가합니다.
-        //         scrollToBottom();
-        //     } catch (error) {
-        //         console.error(error);
-        //     }
-        // }, 5000);
-        // setIntervalId(id);
+        const id = setInterval(async () => {
+            try {
+                const result = await axios.get('http://127.0.0.1:8000/api/AutoTrading/');
+                setData(prevData => [...prevData, result.data]); // GET 요청 결과 데이터를 배열에 추가합니다.
+                scrollToBottom();
+            } catch (error) {
+                console.error(error);
+            }
+        }, 5000);
+        setIntervalId(id);
 
     } catch (error) {
         console.log("error");
@@ -98,11 +89,12 @@ return (
             <Button variant="primary" type="submit">
                 시작
             </Button>
+            <Button variant="danger" className="btn" onClick={handleStop}>
+            중단
+            </Button>
         </Form>
         </div>
-        <Button variant="danger" className="autostop" onClick={handleStop}>
-            중단
-        </Button>
+        
 
         <div className='result-container' ref={resultContainerRef}>
         {data.length > 0 ? (
