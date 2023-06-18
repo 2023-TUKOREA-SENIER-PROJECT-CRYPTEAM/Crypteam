@@ -2,8 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import '../../css/AutoTrading.css'
 import { Form, Button } from 'react-bootstrap';
+// import { Box } from '@mui/material';
+import { createChart, CrosshairMode} from 'lightweight-charts';
 
 function AutoTrading() {
+    const chartContainerRef = useRef(null);
     const [apiKey, setApiKey] = useState('');
     const [secret, setSecret] = useState('');
     const [symbol, setSymbol] = useState('');
@@ -11,6 +14,7 @@ function AutoTrading() {
     const [data, setData] = useState([]);
     const [intervalId, setIntervalId] = useState(null);
     const resultContainerRef = useRef(null);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,7 +28,7 @@ function AutoTrading() {
         }
         );
 
-        setData([response.data]); // POST 요청 응답 데이터를 배열에 담아 설정합니다.
+        //setData([response.data]); // POST 요청 응답 데이터를 배열에 담아 설정합니다.
         console.log(response.data);
         // 시작 버튼을 눌렀을 때 5초마다 자동으로 GET 요청을 보내기 위해 setInterval을 설정합니다.
         const id = setInterval(async () => {
@@ -89,12 +93,11 @@ return (
             <Button variant="primary" type="submit">
                 시작
             </Button>
-            <Button variant="danger" className="btn" onClick={handleStop}>
-            중단
+            <Button variant="danger" className="autostop" onClick=      {handleStop}>
+                중단
             </Button>
         </Form>
         </div>
-        
 
         <div className='result-container' ref={resultContainerRef}>
         {data.length > 0 ? (
