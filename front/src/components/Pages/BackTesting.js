@@ -1,11 +1,25 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { createChart, CrosshairMode } from "lightweight-charts";
-import {Paper, Grid, Modal, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
+import {Paper, Grid, Modal, Button, FormControl, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import "../../css/Backtesting.css";
+import { Box } from '@mui/material';
+
+const StyledModal = styled(Modal)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ModalContent = styled('div')`
+  background-color: #fff;
+  padding: 60px;
+  outline: none;
+  width: 180px;
+`;
 
 const BackTesting = () => {
   const chartContainerRef = useRef(null);
@@ -20,7 +34,10 @@ const BackTesting = () => {
   const [startDate, setStartDate] = useState(null);
   const [result, setResult] = useState("");
   const [showModal, setShowModal] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(null);
+  const [sell, setsell] = useState(null);
+  const [buy, setbuy] = useState(null);
   useEffect(() => {
     // 차트 생성
     const chart = createChart(chartContainerRef.current, {
@@ -42,6 +59,92 @@ const BackTesting = () => {
       chart.remove();
     };
   }, [result]);
+  useEffect(() => {
+    if (!isLoading && data) {
+      if (!chartInstanceRef.current) {
+        chartInstanceRef.current = createChart(chartContainerRef.current, {
+          width: 700,
+          height: 370,
+          crosshair: {
+            mode: CrosshairMode.Normal,
+          },
+        });
+      }
+
+      const chart = chartInstanceRef.current;
+      const candlestickSeries = chart.addCandlestickSeries();
+      // console.log(data);
+      candlestickSeries.setData(data);
+
+      const lineSeries = chart.addLineSeries({
+        priceLineVisible: false,
+        lastValueVisible: false,
+        priceLineSource: data[data.length - 1].close,
+        priceLineWidth: 1,
+      });
+
+      lineSeries.applyOptions({
+        priceLineColor: 'rgba(255, 0, 0, 0.8)',
+      }); 
+
+      const redDots = []; // Example: Sell data points
+      for(var key in sell){
+        redDots.push(data[parseInt(key)]);
+      }
+      redDots.forEach((dataPoint) => {
+        const series = chart.addLineSeries({
+          lineWidth: 0,
+          color: 'red',
+          priceLineVisible: false,
+        });
+
+        series.setData([
+          { time: dataPoint.time, value: dataPoint.close },
+        ]);
+
+        series.setMarkers([
+          {
+            time: dataPoint.time,
+            position: 'aboveBar',
+            shape: 'circle',
+            size: 1,
+            color: 'red',
+            text: 'sell',
+          },
+        ]);
+      });
+
+      const blueDots = []; // Example: Buy data points
+      for(var key in buy){
+        blueDots.push(data[parseInt(key)]);
+      }
+      blueDots.forEach((dataPoint) => {
+        const series = chart.addLineSeries({
+          lineWidth: 0,
+          color: 'blue',
+          priceLineVisible: false,
+        });
+
+        series.setData([
+          { time: dataPoint.time, value: dataPoint.close },
+        ]);
+
+        series.setMarkers([
+          {
+            time: dataPoint.time,
+            position: 'belowBar',
+            shape: 'circle',
+            size: 1,
+            color: 'blue',
+            text: 'buy',
+          },
+        ]);
+      });
+
+      chart.timeScale().fitContent();
+    }
+  }, [isLoading, data]);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -54,16 +157,26 @@ const BackTesting = () => {
       // test_size: testSize,
     };
     const url = "http://127.0.0.1:8000/api/start_bot/";
-    axios
-      .post(url, formData)
+    axios.post(url, formData)
       .then((res) => {
-        if (Array.isArray(res.data)) {
-          setResult(res.data);
-        } else {
-          setResult([]);
-        }
+        const obj = JSON.parse(res.data);
+        const temp = Object.values(obj);
+        const chart_data = temp.slice(0,temp.length-3);
+        setsell(temp[temp.length-3]);
+        setbuy(temp[temp.length-2]);
+        setResult(temp[temp.length-1]);
+          const transformedData = chart_data.map((item) => ({
+            time: Date.parse(item.time) / 1000,
+            open:item.open,
+            high:item.high,
+            low:item.low,
+            close:item.close,}));
+
+          setData(transformedData);
+          setIsLoading(false);
+          // setResult(info_data[2]);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {console.log(err);setIsLoading(false);});
 
     // 상태 초기화
     setCoinName("");
@@ -98,22 +211,12 @@ const BackTesting = () => {
   /* CSS 스타일링을 여기에 적용하세요 */
 `;
 
-const StyledModal = styled(Modal)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 
-const ModalContent = styled("div")`
-  background-color: white;
-  padding: 16px;
-  border-radius: 4px;
-`;
 
   return (
     <>
       <Grid container spacing={2} sx={{ paddingTop: 10, display: 'flex', justifyContent: 'center' }}>
-        <Grid item xs={10} sm={11}>
+        <Grid item xs={12} sm={10}>
           <Paper sx={{ padding: 2 }}>
             <Grid item>
               <Typography variant="h5">백테스팅</Typography>
@@ -214,34 +317,47 @@ const ModalContent = styled("div")`
               <ModalContent>
                 <h2>Add Parameter</h2>
                 <label htmlFor="rsi">RSI:</label>
-                <TextField
-                  type="text"
+                <TextField sx={{ marginBottom: '20px' }}
+                  type=""
                   id="rsi"
                   value={rsi}
                   onChange={(e) => setRsi(e.target.value)}
                 />
                 <label htmlFor="ma">MA:</label>
-                <TextField
-                  type="text"
+                <TextField sx={{ marginBottom: '20px' }}
+                  type=""
                   id="ma"
                   value={ma}
                   onChange={(e) => setMa(e.target.value)}
                 />
                 <label htmlFor="ema">EMA:</label>
-                <TextField
-                  type="text"
+                <TextField sx={{ marginBottom: '20px' }}
+                  type=""
                   id="ema"
                   value={ema}
                   onChange={(e) => setEma(e.target.value)}
                 />
                 <Button type="button" variant="contained" color="success" onClick={handleModalSave}>
                   Save
-                </Button>
+                </Button>{" "}
                 <Button type="button" variant="contained" color="success" onClick={() => setShowModal(false)}>
                   Close
                 </Button>
               </ModalContent>
             </StyledModal>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              width="100%"
+              height="100vh"
+            >
+              {isLoading ? (
+                <p>Loading...</p>
+              ) : (
+                <Box ref={chartContainerRef} />
+              )}
+            </Box>
           </Paper>
         </Grid>
       </Grid>
