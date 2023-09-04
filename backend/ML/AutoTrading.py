@@ -107,7 +107,7 @@ def bot(binance, symbol,name, timeframe, model, trade_history):
     if now_time != previous_time and action == 1:
       order = binance.create_market_buy_order(
       symbol=name,
-      amount=0.01)
+      amount=0.001)
       Account = buy(Account,data.iloc[-1]['open'])
       previous_time = now_time
       previous_state = now_state
@@ -140,7 +140,7 @@ def bot(binance, symbol,name, timeframe, model, trade_history):
     line.append(Account["result"])
     line.append(round((data.iloc[-1]['close'] - Account["average_price"])/data.iloc[-1]['close'] * 100,2))
     trade_history.append(line)
-    time.sleep(0.5)
+    time.sleep(2)
     temp = [[now_time, data.iloc[-1]['close'], Account["amount"], Account['average_price'], round((data.iloc[-1]['close'] - Account["average_price"])/data.iloc[-1]['close'] * 100,2), action, Account["result"], temp1 ,data.iloc[-1]["open"], data.iloc[-1]["high"], data.iloc[-1]["low"], data.iloc[-1]["close"]]]
     pd.DataFrame(temp, columns=["time", "price", "amount", "average_price", "ROE", "pred", "yeild","time2","open","high","low","close"]).to_csv("trading_data.csv")
 def Trading(api_key, secret, symbol, leverage):
